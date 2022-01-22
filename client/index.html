@@ -6,6 +6,7 @@
     <script src="https://unpkg.com/super-hands@^3.0.1/dist/super-hands.min.js"></script>
     <script src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js"></script>
     <script src="components/shelf.js"></script>
+    <script src="components/picture-frame.js"></script>
   </head>
   <body>
     <a-scene inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
@@ -15,7 +16,8 @@
         <img id="drink-cheers-src" src="images/wall-poster-drink-cheers.jpg">
         <a-asset-item id="cereal" src="models/cereal.glb"></a-asset-item>
       </a-assets>
-      <a-entity gltf-model="#cereal" position="0 1 0" scale="0.08 0.08 0.08"></a-entity>
+      <a-entity id="art1" picture-frame position="0 1 -1">
+      </a-entity>
       <a-entity id="cameraRig" position="0 1.7 0">
         <a-entity id="head" camera wasd-controls look-controls></a-entity>
         <a-entity id="left-hand" oculus-touch-controls="hand: right" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
