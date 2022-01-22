@@ -18,6 +18,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
 
   document.addEventListener('mousedown', event => {
     mediaRecorder.start(250)
+    console.log('onopen' )
   })
 
   document.addEventListener('mouseup', event => {
@@ -42,15 +43,15 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     const transcript = received.channel.alternatives[0].transcript
     if (transcript && received.is_final) {
       console.log(transcript)
-      document.querySelector('#transcript').textContent =
+      document.querySelector('#transcript').textContent +=
         transcript + ' '
       const myArray = transcript.split(" ");
-      document.querySelector('#demo').textContent =
-        myArray + ' '
-      console.log("These" + myArray);
-      if (transcript.includes('hello')) {
-        console.log('The word "' + '" exists in given string.');
-      }
+      // document.querySelector('#demo').textContent =
+      //   myArray + ' '
+      // console.log("These" + myArray);
+      // if (transcript.includes('hello')) {
+      //   console.log('The word "' + '" exists in given string.');
+      // }
     }
   }
 
