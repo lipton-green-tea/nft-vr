@@ -6,13 +6,16 @@ def filter_transcript(transcript):
     prices = ['costs', 'prices', 'value']
     cheaper_prices = ['lower', 'reduce', 'drop', 'cheaper', 'cheapest', 'low']
     current_trends = ['latest', 'current', 'trends', 'newest', 'new']
+    all_time = ['all','time', 'all-time', 'overall']
+
 
     Increase_mentioned = check_in_array(sentence, rising_prices)
     Price_mentioned = check_in_array(sentence, prices)
     Low_mentioned = check_in_array(sentence, cheaper_prices)
     current_mentioned = check_in_array(sentence, current_trends)
+    alltime_mentioned = check_in_array(sentence, all_time)
 
-    action = result(rising_prices, prices, cheaper_prices, current_trends)
+    action = result(rising_prices, prices, cheaper_prices, current_trends, alltime_mentioned)
     return action
 
 
@@ -32,15 +35,20 @@ def check_in_array(A, B):
         if A[i] in B:
             return True
     
-def result(rising_prices, prices, cheaper_prices, current_trends):
+def result(rising_prices, prices, cheaper_prices, current_trends, alltime_mentioned):
+    if alltime_mentioned:
+        addon = ' ALL TIME'
+    else:
+        addon = ''
     if rising_prices and prices:
-        result = 'Show Higher Prices'
+        result = 'Show Higher Prices' + addon
     elif prices and cheaper_prices:
-        result = 'Show lower Prices'
+        result = 'Show lower Prices' + addon
     elif current_trends:
         result = 'Show current trends'
+
     return result
 
-transcript_ = 'can you show me higher prices of NFTs'
+transcript_ = 'can you show me higher prices of NFTs from all time'
 final_act = filter_transcript(transcript_)
 print(final_act)
