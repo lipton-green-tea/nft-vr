@@ -31,6 +31,13 @@ def getNFT(tokenAddress, tokenID, size=800):
     return url
 
 
+@app.route('/transcript', methods=['GET', 'POST'])
+def handleTranscript():
+    content = request.json["text"]
+    print(content)
+    return ('', 200)
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -55,10 +62,6 @@ def fetchCollectionMarketplace():
         nft["height"] = SIZE
     return jsonify(data)
 
-
-@app.route('/transcript', methods=['POST'])
-def handleTranscript():
-   transcript = request.form['text']
 
 @app.route('/<path:path>')
 def static_dir(path):
