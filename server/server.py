@@ -2,9 +2,11 @@ from flask import Flask, jsonify, request, render_template, send_from_directory
 import requests
 import time
 import os
+from flask_cors import CORS
 
-template_dir = os.path.abspath('client')
+template_dir = os.path.abspath('../client')
 app = Flask(__name__, template_folder=template_dir)
+CORS(app)
 
 DOMAIN = "https://api2.cryptoslam.io/api"
 CDN = "https://d35vxokfjoq7rk.cloudfront.net"
@@ -53,6 +55,10 @@ def fetchCollectionMarketplace():
         nft["height"] = SIZE
     return jsonify(data)
 
+
+@app.route('/transcript', methods=['POST'])
+def handleTranscript():
+   transcript = request.form['text']
 
 @app.route('/<path:path>')
 def static_dir(path):
