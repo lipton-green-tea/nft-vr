@@ -14,26 +14,44 @@ AFRAME.registerComponent('picture-frame', {
 
         // init image
         this.image_el = document.createElement('a-image');
-        this.image_el.id = this.el.id + '-image';
-        this.image_el.src = "https://static.vecteezy.com/system/resources/previews/001/826/248/non_2x/progress-loading-bar-buffering-download-upload-and-loading-icon-vector.jpg";
-        this.image_el.setAttribute('width', 0.8);
-        this.image_el.setAttribute('height' = 0.8);
-        this.image_el.position = "0 0 0.02";
         this.el.appendChild(this.image_el);
+        this.image_el.setAttribute('id', this.el.id + '-image');
+        this.image_el.setAttribute('src', "https://static.vecteezy.com/system/resources/previews/001/826/248/non_2x/progress-loading-bar-buffering-download-upload-and-loading-icon-vector.jpg");
+        this.image_el.setAttribute('width', 0.8);
+        this.image_el.setAttribute('height', 0.8);
+        this.image_el.setAttribute('position', "0 0 0.02");
 
-        // // init frame borders
-        // this.left_border = document.createElement('a-box');
-        // this.left_border.scale = "1 0.08 0.08";
-        // this.left_border.position = "-0.79 0 0.02";
-        // this.top_border = document.createElement('a-box');
+        // init frame borders
+        this.left_border = document.createElement('a-box');
+        this.el.appendChild(this.left_border);
+        this.left_border.setAttribute('scale', "0.08 1.5 0.08");
+        this.left_border.setAttribute('position', "-0.54 0 0.02");
+        this.left_border.setAttribute('color', '#964B00');
 
+        this.right_border = document.createElement('a-box');
+        this.el.appendChild(this.right_border);
+        this.right_border.setAttribute('scale', "0.08 1.5 0.08");
+        this.right_border.setAttribute('position', "0.54 0 0.02");
+        this.right_border.setAttribute('color', '#964B00');
+        
+        this.top_border = document.createElement('a-box');
+        this.el.appendChild(this.top_border);
+        this.top_border.setAttribute('scale', "1.16 0.08 0.08");
+        this.top_border.setAttribute('position', "0 0.79 0.02");
+        this.top_border.setAttribute('color', '#964B00');
+        
+        this.bottom_border = document.createElement('a-box');
+        this.el.appendChild(this.bottom_border);
+        this.bottom_border.setAttribute('scale', "1.16 0.08 0.08");
+        this.bottom_border.setAttribute('position', "0 -0.79 0.02");
+        this.bottom_border.setAttribute('color', '#964B00');
 
-        //this.el.addEventListener(this.el.id, this.load_nft);
+        this.el.addEventListener(this.el.id + '_load_nft', this.load_nft);
+    },
+
+    load_nft: function (info) {
+        this.image_el.src = info.url;
+        this.image_el.width = 0.8;
+        this.image_el.height = 0.8;
     }
-
-    // load_nft: function (info) {
-    //     this.image_el.src = info.url;
-    //     this.image_el.width = 0.8;
-    //     this.image_el.height = 0.8;
-    // }
   });
