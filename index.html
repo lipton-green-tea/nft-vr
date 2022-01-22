@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/super-hands@^3.0.1/dist/super-hands.min.js"></script>
+    <script src="components/shelf.js"></script>
+  </head>
+  <body>
+    <a-scene inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
+      <a-assets>
+        <img id="line-friends-src" src="images/wall-poster-line-friends.jpg">
+        <img id="korean-food-src" src="images/wall-poster-korean-food.jpg">
+        <img id="drink-cheers-src" src="images/wall-poster-drink-cheers.jpg">
+        <a-asset-item id="cereal" src="models/cereal.glb"></a-asset-item>
+      </a-assets>
+      <a-entity gltf-model="#cereal" position="0 1 0" scale="0.08 0.08 0.08"></a-entity>
+      <a-entity sphere-collider="objects: a-box" super-hands oculus-touch-controls="hand: left"></a-entity>
+      <a-entity sphere-collider="objects: a-box" super-hands oculus-touch-controls="hand: right"></a-entity>
+      <a-image id="wall-poster-line-friends" src="#line-friends-src" width="0.423" height="0.512" position="0.6 1.25 2.94" rotation="0 180 0"></a-image>
+      <a-image id="wall-poster-korean-food" src="#korean-food-src" width="0.364" height="0.512" position="1.4 1.25 2.94" rotation="0 180 0"></a-image>
+      <a-image id="wall-poster-drink-cheers" src="#drink-cheers-src" width="0.362" height="0.512" position="-0.2 1.25 2.94" rotation="0 180 0"></a-image>
+      <a-box id="wall1" scale="0.1 2.5 6" position="-4 1.25 0" rotation="0 0 0" color="#4CC3D9"></a-box>
+      <a-box id="wall2" scale="0.1 2.5 6" position="4 1.25 0" rotation="0 0 0" color="#4CC3D9"></a-box>
+      <a-box id="wall3" scale="8 2.5 0.1" position="0 1.25 3" rotation="0 0 0" color="#4CC3D9"></a-box>
+      <a-box id="wall4" scale="8 2.5 0.1" position="0 1.25 -3" rotation="0 0 0" color="#4CC3D9"></a-box>
+      <a-plane id="floor1" scale="2 1.5 1" position="0 0 0" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+      <a-sky color="#ECECEC"></a-sky>
+    </a-scene>
+  </body>
+</html>
