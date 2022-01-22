@@ -4,6 +4,7 @@
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
     <script src="https://unpkg.com/super-hands@^3.0.1/dist/super-hands.min.js"></script>
+    <script src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js"></script>
     <script src="components/shelf.js"></script>
   </head>
   <body>
@@ -15,8 +16,8 @@
         <a-asset-item id="cereal" src="models/cereal.glb"></a-asset-item>
       </a-assets>
       <a-entity gltf-model="#cereal" position="0 1 0" scale="0.08 0.08 0.08"></a-entity>
-      <a-entity sphere-collider="objects: a-box" super-hands oculus-touch-controls="hand: left"></a-entity>
-      <a-entity sphere-collider="objects: a-box" super-hands oculus-touch-controls="hand: right"></a-entity>
+      <a-entity teleport-controls sphere-collider="objects: a-box" super-hands oculus-touch-controls="hand: left"></a-entity>
+      <a-entity teleport-controls sphere-collider="objects: a-box" super-hands oculus-touch-controls="hand: right"></a-entity>
       <a-image id="wall-poster-line-friends" src="#line-friends-src" width="0.423" height="0.512" position="0.6 1.25 2.94" rotation="0 180 0"></a-image>
       <a-image id="wall-poster-korean-food" src="#korean-food-src" width="0.364" height="0.512" position="1.4 1.25 2.94" rotation="0 180 0"></a-image>
       <a-image id="wall-poster-drink-cheers" src="#drink-cheers-src" width="0.362" height="0.512" position="-0.2 1.25 2.94" rotation="0 180 0"></a-image>
