@@ -1,1 +1,1 @@
-web: npm install && npm start -- --port=$PORT
+web: python server/server.py
