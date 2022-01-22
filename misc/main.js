@@ -1,8 +1,22 @@
-//Connecting to Deepgram API       
+//Connecting to Deepgram API
+
+
+
+document.addEventListener('keyup', event => {
+  if (event.code === 'Space') {
+    console.log('Space unpressed'); //whatever you want to do when space is pressed
+    mediaRecorder.stop()
+  }
+})
+
+
       navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
         console.log({ stream })
         if (!MediaRecorder.isTypeSupported('audio/webm'))
           return alert('Browser not supported')
+
+
+
         const mediaRecorder = new MediaRecorder(stream, {
           mimeType: 'audio/webm',
         })
@@ -10,17 +24,42 @@
           'token',
           'afb070dcdf74971b5a7734225d244ddf310571fc',
         ])
+
+
+       document.addEventListener('keydown', event => {
+            if (event.code === 'Space') {
+              console.log('Space pressed'); //whatever you want to do when space is pressed
+              mediaRecorder.start(250)
+
+            }
+          })
+
+
+          document.addEventListener('keyup', event => {
+            if (event.code === 'Space') {
+              console.log('Space pressed'); //whatever you want to do when space is pressed
+              mediaRecorder.stop()
+
+            }
+          })
+
         socket.onopen = () => {
           document.querySelector('#status').textContent = 'Connected'
           console.log({ event: 'onopen' })
+
+
+
           mediaRecorder.addEventListener('dataavailable', async (event) => {
             if (event.data.size > 0 && socket.readyState == 1) {
               socket.send(event.data)
             }
           })
-          mediaRecorder.start(250)
+
+
         }
 
+
+   
         socket.onmessage = (message) => {
           const received = JSON.parse(message.data)
           const transcript = received.channel.alternatives[0].transcript
@@ -46,4 +85,7 @@
         socket.onerror = (error) => {
           console.log({ event: 'onerror', error })
         }
+
+
+        
       })
