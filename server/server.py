@@ -31,28 +31,11 @@ def getNFT(tokenAddress, tokenID, size=800):
     return url
 
 
-def downloadImages(c):
-    data = fetchData("marketplace/{}/12/last?_={}".format(c, int(time.time())))
-    for nft in data:
-        address = nft["tokens"][0]["address"]
-        tokenID = nft["tokens"][0]["tokenId"]
-        img_url = getNFT(address, tokenID, size=SIZE)
-        img_title = nft['id']
-        img_path = "../client/images/{}.{}".format(
-            img_title.replace("/", "-"), "jpg")
-        nft["width"] = SIZE
-        nft["height"] = SIZE
-        nft["url"] = "https://nft-vr.herokuapp.com/images/" + nft['id'] + ".jpg"
-        r = requests.get(img_url)
-        with open(img_path, 'wb') as f:
-            f.write(r.content)
-
-
 @app.route('/transcript', methods=['GET', 'POST'])
 def handleTranscript():
     content = request.json["text"]
     print(content)
-    return ('', 200)
+    return ('', 204)
 
 
 @app.route('/')
@@ -72,9 +55,20 @@ def fetchCollectionMarketplace():
     c = request.args.get("c")
     data = fetchData("marketplace/{}/12/last?_={}".format(c, int(time.time())))
     for nft in data:
-        nft["url"] = "https://nft-vr.herokuapp.com/images/" + nft['id'] + ".jpg"
+        address = nft["tokens"][0]["address"]
+        tokenID = nft["tokens"][0]["tokenId"]
+        img_url = getNFT(address, tokenID, size=SIZE)
+        img_title = nft['id']
+        img_path = "../client/images/{}.{}".format(
+            img_title.replace("/", "-"), "jpg")
+        print(img_path)
         nft["width"] = SIZE
         nft["height"] = SIZE
+        nft["url"] = "https://nft-vr.herokuapp.com/images/" + img_title + ".jpg"
+        print(img_path, nft["url"])
+        r = requests.get(img_url)
+        with open(img_path, 'wb') as f:
+            f.write(r.content)
     return jsonify(data)
 
 
