@@ -6,6 +6,8 @@ AFRAME.registerComponent('gallerist', {
         this.picture_frames = this.get_picture_frame_ids();
         console.log(this.picture_frames);
         this.request_nfts("ru39");
+        var gal = this
+        this.el.sceneEl.addEventListener("new-nfts", gal.load_nfts_builder(gal));
     },
 
     get_picture_frame_ids: function() {
@@ -26,7 +28,13 @@ AFRAME.registerComponent('gallerist', {
                 this.el.emit(this.picture_frames[idx] + "-load-nft", data[idx], true);
             }
         }).catch(error => console.log(error));
-    }
+    },
 
-    
+    load_nfts_builder: function(gal) {
+        return function(data) {
+            for (let idx = 0; idx < gal.picture_frames.length; idx++) {
+                gal.el.emit(gal.picture_frames[idx] + "-load-nft", data[idx], true);
+            }
+        };
+    }
   });
