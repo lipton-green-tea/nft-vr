@@ -65,6 +65,15 @@ def fetchCollectionMarketplace():
     return jsonify(data)
 
 
+@app.route('/get_collection_data')
+def fetchCollectionData():
+    c = request.args.get("c")
+    t = request.args.get("t")
+    if t in ["buyers", "sellers", "value"]:
+        data = fetchData(
+            "sales/{}/summary-daily-{}?_={}".format(c, t, int(time.time())))
+        return jsonify(data)
+
 method_requests_mapping = {
     'GET': requests.get,
     'HEAD': requests.head,
