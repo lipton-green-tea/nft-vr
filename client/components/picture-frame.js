@@ -1,6 +1,7 @@
 AFRAME.registerComponent('picture-frame', {
 
-    image_el: 1,
+    image_el: null,
+    price_el: null,
     background_el: null,
 
     init: function () {
@@ -20,6 +21,14 @@ AFRAME.registerComponent('picture-frame', {
         this.image_el.setAttribute('width', 0.8);
         this.image_el.setAttribute('height', 0.8);
         this.image_el.setAttribute('position', "0 0 0.02");
+
+        // initialize price tags
+        this.price_el = document.createElement('a-text');
+        this.el.appendChild(this.price_el);
+        this.price_el.setAttribute('value', "0ETH");
+        this.price_el.setAttribute('position', "0.28 0.65 0.03");
+        this.price_el.setAttribute('scale', "0.30 0.25 0.01");
+        this.price_el.setAttribute('color', "#000011");
 
         // add event listener for new NFTs
         this.el.sceneEl.addEventListener(this.el.id + '-load-nft', this.load_nft_builder(this));
@@ -57,6 +66,9 @@ AFRAME.registerComponent('picture-frame', {
             frame_ref.image_el.setAttribute('src', url);
             frame_ref.image_el.setAttribute('width', 0.8);
             frame_ref.image_el.setAttribute('height', 0.8);
+
+            var price = event.detail['currentPrice']
+            frame_ref.price_el.setAttribute('value', price + "ETH")
         };
     }
   });

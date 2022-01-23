@@ -27,4 +27,6 @@ AFRAME.registerComponent('gallerist', {
             }
         }).catch(error => console.log(error));
     }
+
+    
   });

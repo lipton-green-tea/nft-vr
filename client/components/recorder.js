@@ -102,6 +102,8 @@ AFRAME.registerComponent('recorder', {
                 console.log({ event: 'onerror', error })
             }
     
-        })
+        }).catch((e) => {
+            this.emit('debug', "ingo", true);
+        });
     }   
 });
