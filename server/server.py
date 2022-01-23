@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template, send_from_directory
+from flask import Flask, jsonify, request, render_template, send_file, send_from_directory
 import requests
 import flask
 import time
@@ -6,6 +6,8 @@ import os
 import requests_cache
 from flask_cors import CORS
 from TranscriptFilter import filter_transcript, check_in_array, resultfunct
+import base64
+
 template_dir = os.path.abspath('../client')
 app = Flask(__name__, template_folder=template_dir)
 CORS(app, max_age=86400)
@@ -60,7 +62,7 @@ def handleTranscript():
                     img_url = getNFT(address, tokenID, size=SIZE)
                     nft["width"] = SIZE
                     nft["height"] = SIZE
-                    nft["url"] = "https://nft-vr.herokuapp.com/url/{}".format(
+                    nft["url"] = "/url/{}".format(
                         img_url)
                     return jsonify(data)
 
@@ -96,7 +98,7 @@ def fetchTrendingNFTs(timescale="day"):
         img_url = getNFT(address, tokenID, size=SIZE)
         data[0]["width"] = SIZE
         data[0]["height"] = SIZE
-        data[0]["url"] = "https://nft-vr.herokuapp.com/url/{}".format(img_url)
+        data[0]["url"] = "/url/{}".format(img_url)
         res.append(data[0])
     return jsonify(res)
 
@@ -112,7 +114,7 @@ def fetchCollectionMarketplace():
         img_url = getNFT(address, tokenID, size=SIZE)
         nft["width"] = SIZE
         nft["height"] = SIZE
-        nft["url"] = "https://nft-vr.herokuapp.com/url/{}".format(img_url)
+        nft["url"] = "/url/{}".format(img_url)
     return jsonify(data)
 
 
@@ -136,16 +138,16 @@ method_requests_mapping = {
     'OPTIONS': requests.options,
 }
 
+url_cache = []
 
 @app.route('/url/<path:url>', methods=method_requests_mapping.keys())
 def proxy(url):
-    requests_function = method_requests_mapping[flask.request.method]
-    request = requests_function(url, stream=True, params=flask.request.args)
-    response = flask.Response(flask.stream_with_context(request.iter_content()),
-                              content_type=request.headers['content-type'],
-                              status=request.status_code)
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    return response
+    img = url.split("/")[-1].split("?")[0]
+    if url not in url_cache:
+        r = requests.get(url)
+        with open("../client/images/" + img, 'wb') as f:
+            f.write(r.content)
+    return send_from_directory('../client/images/', img)
 
 
 @app.route('/<path:path>')
