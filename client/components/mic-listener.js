@@ -7,5 +7,11 @@ AFRAME.registerComponent("mic-listener", {
             console.log("updatevalue: " + text.target);
             element.setAttribute('value', text);
         });
+
+        document.addEventListener("debug", function (text) {
+            console.log("buggg: " + text.target);
+            element.setAttribute('value', text);
+        });
+
     }
 });
