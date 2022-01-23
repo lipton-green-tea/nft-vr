@@ -40,15 +40,14 @@ AFRAME.registerComponent('recorder', {
             })
         
             socket.onopen = () => {
-            document.querySelector('#status').textContent = 'Connected'
-        
-            console.log({ event: 'onopen' })
-        
-            mediaRecorder.addEventListener('dataavailable', async (event) => {
-                if (event.data.size > 0 && socket.readyState == 1) {
-                    socket.send(event.data)
-                }
-            })
+            
+                console.log({ event: 'onopen' })
+            
+                mediaRecorder.addEventListener('dataavailable', async (event) => {
+                    if (event.data.size > 0 && socket.readyState == 1) {
+                        socket.send(event.data)
+                    }
+                })
         
             }
         
@@ -59,6 +58,7 @@ AFRAME.registerComponent('recorder', {
                 if (t && received.is_final) {
                     console.log(t)
                     transcript += t
+                    this.el.emit('transcription', transcript);
                     // document.querySelector('#transcript').textContent +=
                     //   transcript + ' '
                     // const myArray = transcript.split(" ");
