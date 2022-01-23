@@ -5,6 +5,9 @@ import time
 import os
 from flask_cors import CORS
 from TranscriptFilter import filter_transcript, check_in_array, resultfunct
+from Trends.py import json_data, plot_data
+
+
 template_dir = os.path.abspath('../client')
 app = Flask(__name__, template_folder=template_dir)
 CORS(app)
