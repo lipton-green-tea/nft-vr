@@ -4,7 +4,7 @@ import flask
 import time
 import os
 from flask_cors import CORS
-
+from TranscriptFilter import filter_transcript, check_in_array, resultfunct
 template_dir = os.path.abspath('../client')
 app = Flask(__name__, template_folder=template_dir)
 CORS(app)
@@ -34,9 +34,13 @@ def getNFT(tokenAddress, tokenID, size=800):
 
 @app.route('/transcript', methods=['GET', 'POST'])
 def handleTranscript():
+    print(request.__dict__.items())
     content = request.json["text"]
     print(content)
-    return ('', 204)
+    action = filter_transcript(content)
+    print(action)
+    return ('', 200)
+
 
 
 @app.route('/')
@@ -64,6 +68,15 @@ def fetchCollectionMarketplace():
       nft["url"] = "https://nft-vr.herokuapp.com/url/{}".format(img_url)
     return jsonify(data)
 
+
+@app.route('/get_collection_data')
+def fetchCollectionData():
+    c = request.args.get("c")
+    t = request.args.get("t")
+    if t in ["buyers", "sellers", "value"]:
+        data = fetchData(
+            "sales/{}/summary-daily-{}?_={}".format(c, t, int(time.time())))
+        return jsonify(data)
 
 method_requests_mapping = {
     'GET': requests.get,
