@@ -37,7 +37,7 @@ AFRAME.registerComponent('picture-frame', {
         this.price_el_2.setAttribute('value', "$0");
         this.price_el_2.setAttribute('position', "-0.4 0.45 0.03");
         this.price_el_2.setAttribute('scale', "0.30 0.25 0.01");
-        this.price_el_2.setAttribute('color', "#111111");
+        this.price_el_2.setAttribute('color', "#111100");
         this.el.sceneEl.addEventListener(this.el.id + '-load-nft', this.load_nft_builder(this));
 
         // init frame borders
@@ -75,7 +75,7 @@ AFRAME.registerComponent('picture-frame', {
             frame_ref.image_el.setAttribute('height', 0.8);
 
             var price = event.detail['currentPrice']
-            var dprice = event.detail['dollars']
+            var dprice = event.detail['dollars'] * price;
             frame_ref.price_el.setAttribute('value', price + "ETH")
             frame_ref.price_el_2.setAttribute('value', "$" + dprice)
         };
