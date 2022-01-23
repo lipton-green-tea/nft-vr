@@ -3,6 +3,7 @@ import requests
 import flask
 import time
 import os
+import requests_cache
 from flask_cors import CORS
 from TranscriptFilter import filter_transcript, check_in_array, resultfunct
 template_dir = os.path.abspath('../client')
@@ -12,6 +13,9 @@ CORS(app)
 DOMAIN = "https://api2.cryptoslam.io/api"
 CDN = "https://d35vxokfjoq7rk.cloudfront.net"
 SIZE = 800
+
+requests_cache.install_cache(
+    cache_name='github_cache', backend='sqlite', expire_after=3000)
 
 
 def fetchData(p):
@@ -34,13 +38,37 @@ def getNFT(tokenAddress, tokenID, size=800):
 
 @app.route('/transcript', methods=['GET', 'POST'])
 def handleTranscript():
-    print(request.__dict__.items())
     content = request.json["text"]
     print(content)
-    action = filter_transcript(content)
-    print(action)
-    return ('', 200)
 
+    collections = ["bored ape yacht club", "art blocks", "doodles"]
+    info = ["buyers", "sellers", "sales"]
+
+    words = content.split(" ")
+
+    if "trending" in words:
+        return "trending"
+
+    if "collection" in words:
+        for c in collections:
+            if all([x in words for x in c.split(" ")]):
+                data = fetchData(
+                    "marketplace/{}/12/last?_={}".format(c, round(int(time.time()), -6)))
+                for nft in data:
+                    address = nft["tokens"][0]["address"]
+                    tokenID = nft["tokens"][0]["tokenId"]
+                    img_url = getNFT(address, tokenID, size=SIZE)
+                    nft["width"] = SIZE
+                    nft["height"] = SIZE
+                    nft["url"] = "https://nft-vr.herokuapp.com/url/{}".format(
+                        img_url)
+                    return jsonify(data)
+
+    for w in info:
+        if w in words:
+            return w
+
+    return jsonify(None)
 
 
 @app.route('/')
@@ -55,17 +83,36 @@ def fetchTrendingCollections(timescale="day"):
         return jsonify(data["saleSummaries"][timescale]["saleSummaries"])
 
 
+@app.route('/get_trending_nfts')
+def fetchTrendingNFTs(timescale="day"):
+    colls = ["bored ape yacht club", "art blocks",
+             "doodles", "world of women", "Mutant Ape Yacht Club", "Clonex", "meebits"]
+    res = []
+    for c in colls:
+        data = fetchData(
+            "marketplace/{}/12/last?_={}".format(c, round(int(time.time()), -6)))
+        address = data[0]["tokens"][0]["address"]
+        tokenID = data[0]["tokens"][0]["tokenId"]
+        img_url = getNFT(address, tokenID, size=SIZE)
+        data[0]["width"] = SIZE
+        data[0]["height"] = SIZE
+        data[0]["url"] = "https://nft-vr.herokuapp.com/url/{}".format(img_url)
+        res.append(data[0])
+    return jsonify(res)
+
+
 @app.route('/get_collection')
 def fetchCollectionMarketplace():
     c = request.args.get("c")
-    data = fetchData("marketplace/{}/12/last?_={}".format(c, int(time.time())))
+    data = fetchData("marketplace/{}/12/last?_={}".format(c,
+                     round(int(time.time()), -6)))
     for nft in data:
-      address = nft["tokens"][0]["address"]
-      tokenID = nft["tokens"][0]["tokenId"]
-      img_url = getNFT(address, tokenID, size=SIZE)
-      nft["width"] = SIZE
-      nft["height"] = SIZE
-      nft["url"] = "https://nft-vr.herokuapp.com/url/{}".format(img_url)
+        address = nft["tokens"][0]["address"]
+        tokenID = nft["tokens"][0]["tokenId"]
+        img_url = getNFT(address, tokenID, size=SIZE)
+        nft["width"] = SIZE
+        nft["height"] = SIZE
+        nft["url"] = "https://nft-vr.herokuapp.com/url/{}".format(img_url)
     return jsonify(data)
 
 
@@ -75,8 +122,9 @@ def fetchCollectionData():
     t = request.args.get("t")
     if t in ["buyers", "sellers", "value"]:
         data = fetchData(
-            "sales/{}/summary-daily-{}?_={}".format(c, t, int(time.time())))
+            "sales/{}/summary-daily-{}?_={}".format(c, t, round(int(time.time()), -6)))
         return jsonify(data)
+
 
 method_requests_mapping = {
     'GET': requests.get,
