@@ -52,7 +52,7 @@ AFRAME.registerComponent('picture-frame', {
 
     load_nft_builder: function (frame_ref) {
         return (event) => {
-            var url = "https://nft-vr.herokuapp.com/images/" + event.detail['id'] + ".jpg"
+            var url = event.detail['url']
             console.log(url);
             frame_ref.image_el.setAttribute('src', url);
             frame_ref.image_el.setAttribute('width', 0.8);
