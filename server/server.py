@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, render_template, send_from_directory
 import requests
+import flask
 import time
 import os
 from flask_cors import CORS
@@ -55,21 +56,35 @@ def fetchCollectionMarketplace():
     c = request.args.get("c")
     data = fetchData("marketplace/{}/12/last?_={}".format(c, int(time.time())))
     for nft in data:
-        address = nft["tokens"][0]["address"]
-        tokenID = nft["tokens"][0]["tokenId"]
-        img_url = getNFT(address, tokenID, size=SIZE)
-        img_title = nft['id']
-        img_path = "../client/images/{}.{}".format(
-            img_title.replace("/", "-"), "jpg")
-        print(img_path)
-        nft["width"] = SIZE
-        nft["height"] = SIZE
-        nft["url"] = "https://nft-vr.herokuapp.com/images/" + img_title + ".jpg"
-        print(img_path, nft["url"])
-        r = requests.get(img_url)
-        with open(img_path, 'wb') as f:
-            f.write(r.content)
+      address = nft["tokens"][0]["address"]
+      tokenID = nft["tokens"][0]["tokenId"]
+      img_url = getNFT(address, tokenID, size=SIZE)
+      nft["width"] = SIZE
+      nft["height"] = SIZE
+      nft["url"] = "https://nft-vr.herokuapp.com/url/{}".format(img_url)
     return jsonify(data)
+
+
+method_requests_mapping = {
+    'GET': requests.get,
+    'HEAD': requests.head,
+    'POST': requests.post,
+    'PUT': requests.put,
+    'DELETE': requests.delete,
+    'PATCH': requests.patch,
+    'OPTIONS': requests.options,
+}
+
+
+@app.route('/url/<path:url>', methods=method_requests_mapping.keys())
+def proxy(url):
+    requests_function = method_requests_mapping[flask.request.method]
+    request = requests_function(url, stream=True, params=flask.request.args)
+    response = flask.Response(flask.stream_with_context(request.iter_content()),
+                              content_type=request.headers['content-type'],
+                              status=request.status_code)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
 
 
 @app.route('/<path:path>')
