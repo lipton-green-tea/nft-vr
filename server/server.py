@@ -6,7 +6,12 @@ import os
 import requests_cache
 from flask_cors import CORS
 from TranscriptFilter import filter_transcript, check_in_array, resultfunct
+<<<<<<< HEAD
 import base64
+=======
+from Trends.py import json_data, plot_data
+
+>>>>>>> fa15cb9f1402cbe23b854c5675154fd5cb540498
 
 template_dir = os.path.abspath('../client')
 app = Flask(__name__, template_folder=template_dir)
