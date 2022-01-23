@@ -29,4 +29,4 @@ AFRAME.registerComponent('gallerist', {
     }
 
     
-  });
+});

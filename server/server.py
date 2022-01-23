@@ -40,6 +40,12 @@ def getNFT(tokenAddress, tokenID, size=800):
     return url
 
 
+def getExchange():
+    req = requests.get(
+        "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR")
+    data = req.json()
+    return data
+
 @app.route('/transcript', methods=['GET', 'POST'])
 def handleTranscript():
     content = request.json["text"]
@@ -50,8 +56,21 @@ def handleTranscript():
 
     words = content.split(" ")
 
-    if "trending" in words:
-        return "trending"
+    if "trending" or "refresh" in words:
+        res = []
+        for c in colls:
+            data = fetchData(
+                "marketplace/{}/12/last?_={}".format(c, round(int(time.time()), -6)))
+            address = data[0]["tokens"][0]["address"]
+            tokenID = data[0]["tokens"][0]["tokenId"]
+            img_url = getNFT(address, tokenID, size=SIZE)
+            data[0]["width"] = SIZE
+            data[0]["height"] = SIZE
+            data[0]["dollars"] = getExchange()["USD"]
+            data[0]["url"] = "https://nft-vr.herokuapp.com/url/{}".format(
+                img_url)
+            res.append(data[0])
+        return jsonify(res)
 
     if "collection" in words:
         for c in collections:
@@ -64,8 +83,8 @@ def handleTranscript():
                     img_url = getNFT(address, tokenID, size=SIZE)
                     nft["width"] = SIZE
                     nft["height"] = SIZE
-                    nft["url"] = "/url/{}".format(
-                        img_url)
+                    nft["dollars"] = getExchange()["USD"]
+                    nft["url"] = "/url/{}".format(img_url)
                     return jsonify(data)
 
     for w in info:
@@ -100,6 +119,7 @@ def fetchTrendingNFTs(timescale="day"):
         img_url = getNFT(address, tokenID, size=SIZE)
         data[0]["width"] = SIZE
         data[0]["height"] = SIZE
+        data[0]["dollars"] = getExchange()["USD"]
         data[0]["url"] = "https://nft-vr.herokuapp.com/url/{}".format(img_url)
         res.append(data[0])
     return jsonify(res)
@@ -116,6 +136,7 @@ def fetchCollectionMarketplace():
         img_url = getNFT(address, tokenID, size=SIZE)
         nft["width"] = SIZE
         nft["height"] = SIZE
+        nft["dollars"] = getExchange()["USD"]
         nft["url"] = "https://nft-vr.herokuapp.com/url/{}".format(img_url)
     return jsonify(data)
 
