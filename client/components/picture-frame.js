@@ -1,6 +1,6 @@
 AFRAME.registerComponent('picture-frame', {
 
-    image_el: null,
+    image_el: 1,
     background_el: null,
 
     init: function () {
@@ -20,10 +20,9 @@ AFRAME.registerComponent('picture-frame', {
         this.image_el.setAttribute('width', 0.8);
         this.image_el.setAttribute('height', 0.8);
         this.image_el.setAttribute('position', "0 0 0.02");
-        console.log("set");
 
         // add event listener for new NFTs
-        this.el.sceneEl.addEventListener(this.el.id + '-load-nft', this.load_nft);
+        this.el.sceneEl.addEventListener(this.el.id + '-load-nft', this.load_nft_builder(this));
 
         // init frame borders
         this.left_border = document.createElement('a-box');
@@ -51,11 +50,13 @@ AFRAME.registerComponent('picture-frame', {
         this.bottom_border.setAttribute('color', '#964B00');
     },
 
-    load_nft: function (event) {
-        console.log(event.detail.url);
-        console.log(this.image_el);
-        this.image_el.setAttribute('src', "https://d35vxokfjoq7rk.cloudfront.net/0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d/178-0.png?d=800");
-        this.image_el.setAttribute('width', 0.8);
-        this.image_el.setAttribute('height', 0.8);
+    load_nft_builder: function (frame_ref) {
+        return (event) => {
+            var url = event.detail['url']
+            console.log(url);
+            frame_ref.image_el.setAttribute('src', url);
+            frame_ref.image_el.setAttribute('width', 0.8);
+            frame_ref.image_el.setAttribute('height', 0.8);
+        };
     }
   });

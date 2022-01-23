@@ -14,7 +14,6 @@ def filter_transcript(transcript):
     Low_mentioned = check_in_array(sentence, cheaper_prices)
     current_mentioned = check_in_array(sentence, current_trends)
     alltime_mentioned = check_in_array(sentence, all_time)
-
     action = resultfunct(Increase_mentioned, Price_mentioned, Low_mentioned, current_mentioned, alltime_mentioned)
     return action
 
@@ -34,8 +33,7 @@ def check_in_array(A, B):
     for i in range(len(A)):
         if A[i] in B:
             return True
-        else:
-            return False
+
     
 def resultfunct(rising_prices, prices, cheaper_prices, current_trends, alltime_mentioned):
     result = ''
@@ -52,6 +50,3 @@ def resultfunct(rising_prices, prices, cheaper_prices, current_trends, alltime_m
 
     return result
 
-transcript_ = 'Show me current trends'
-final_act = filter_transcript(transcript_)
-print(final_act)
