@@ -8,7 +8,7 @@ from flask_cors import CORS
 from TranscriptFilter import filter_transcript, check_in_array, resultfunct
 template_dir = os.path.abspath('../client')
 app = Flask(__name__, template_folder=template_dir)
-CORS(app)
+CORS(app, max_age=86400)
 
 DOMAIN = "https://api2.cryptoslam.io/api"
 CDN = "https://d35vxokfjoq7rk.cloudfront.net"
