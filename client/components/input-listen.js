@@ -1,5 +1,7 @@
 AFRAME.registerComponent("input-listen", {
     init: function () {
+        var outerThis = this;
+
         //X-button Pressed
         this.el.addEventListener("xbuttondown", function (e) {
             this.emit("teleportstart");

@@ -18,17 +18,17 @@ AFRAME.registerComponent('recorder', {
                 'afb070dcdf74971b5a7734225d244ddf310571fc',
             ])
         
-            document.addEventListener('recordstart', event => {
+            document.addEventListener('ybuttondown', event => {
                 transcript = ""
                 mediaRecorder.start(250)
                 console.log('onopen')
             })
         
-            document.addEventListener('recordend', event => {
+            document.addEventListener('ybuttonup', event => {
                 mediaRecorder.stop();
                 console.log("finished")
                 console.log(transcript)
-                fetch("/transcript", {
+                fetch("https://nft-vr.herokuapp.com/transcript", {
                     body: JSON.stringify({ "text": transcript }),
                     headers: {
                     "Content-Type": "application/json"
@@ -38,6 +38,27 @@ AFRAME.registerComponent('recorder', {
                     console.log(response);
                 });
             })
+
+            // document.addEventListener('mousedown', event => {
+            //     transcript = ""
+            //     mediaRecorder.start(250)
+            //     console.log('onopen')
+            //   })
+            
+            //   document.addEventListener('mouseup', event => {
+            //     mediaRecorder.stop();
+            //     console.log("finished")
+            //     console.log(transcript)
+            //     fetch("https://nft-vr.herokuapp.com/transcript", {
+            //       body: JSON.stringify({ "text": transcript }),
+            //       headers: {
+            //         "Content-Type": "application/json"
+            //       },
+            //       method: "POST"
+            //     }).then((response) => {
+            //       console.log(response);
+            //     });
+            //   })
         
             socket.onopen = () => {
             

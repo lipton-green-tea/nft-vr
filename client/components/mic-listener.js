@@ -1,8 +1,11 @@
-AFRAME.registerComponent("input-listen", {
+AFRAME.registerComponent("mic-listener", {
     init: function () {
+        var element = this.el;
+
         //X-button Pressed
-        this.el.addEventListener("transcription", function (text) {
-            this.el.setAttribute('value', text);
+        document.addEventListener("transcription", function (text) {
+            console.log("updatevalue: " + text.target);
+            element.setAttribute('value', text);
         });
     }
 });
