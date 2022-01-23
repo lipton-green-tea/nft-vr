@@ -1,6 +1,27 @@
+import json
+import matplotlib.pyplot as plt
 
+#with open('testdata.json') as json_file:
+#    data = json.load(json_file)
 
-history_eg = [{"daysAgo":29,"value":163399.32811009564},{"daysAgo":28,"value":476540.19482571754},{"daysAgo":27,"value":510975.32523180556},{"daysAgo":26,"value":581992.852008522},{"daysAgo":25,"value":715823.1106615784},{"daysAgo":24,"value":291747.4232893718},{"daysAgo":23,"value":244184.7349166296},{"daysAgo":22,"value":184942.79394016162},{"daysAgo":21,"value":307662.69126009376},{"daysAgo":20,"value":313464.72037975467},{"daysAgo":19,"value":795177.148358},{"daysAgo":18,"value":1190547.1074347582},{"daysAgo":17,"value":537895.3377974973},{"daysAgo":16,"value":429548.5646363436},{"daysAgo":15,"value":266332.8776282319},{"daysAgo":14,"value":333823.3513132724},{"daysAgo":13,"value":294542.317041599},{"daysAgo":12,"value":714554.5207277661},{"daysAgo":11,"value":87963011.47862545},{"daysAgo":10,"value":285065123.54699033},{"daysAgo":9,"value":255570659.91240185},{"daysAgo":8,"value":187015187.46236396},{"daysAgo":7,"value":241638572.5774534},{"daysAgo":6,"value":282523251.2579568},{"daysAgo":5,"value":405599829.07861173},{"daysAgo":4,"value":283289700.70335644},{"daysAgo":3,"value":287810621.23054147},{"daysAgo":2,"value":217454208.95524114},{"daysAgo":1,"value":207802163.8824734},{"daysAgo":0,"value":292422829.53331196}]
+#for
+#print(data[i]['bicycle']['price'])
 
-def getData(history):
-    print(history(1))
+with open('testdata.json') as json_file:
+    data = json.load(json_file)
+
+history = []
+daysAgo = []
+
+for i in range(len(data)):
+    value=data[i]["value"]
+    day=data[i]["daysAgo"]
+    history.append(value)
+    daysAgo.append(day)
+
+plt.plot(daysAgo, history)
+plt.xlim(daysAgo[0], 0)
+plt.xlabel("Days Ago")
+plt.ylabel("Value, $")
+plt.savefig('testPlot.png')
+plt.show()
