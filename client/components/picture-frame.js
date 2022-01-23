@@ -73,7 +73,6 @@ AFRAME.registerComponent('picture-frame', {
             frame_ref.image_el.setAttribute('src', url);
             frame_ref.image_el.setAttribute('width', 0.8);
             frame_ref.image_el.setAttribute('height', 0.8);
-
             var price = event.detail['currentPrice']
             var dprice = event.detail['dollars'] * price;
             frame_ref.price_el.setAttribute('value', price + "ETH")
