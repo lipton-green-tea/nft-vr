@@ -46,6 +46,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       document.querySelector('#transcript').textContent +=
         transcript + ' '
       const myArray = transcript.split(" ");
+
       // document.querySelector('#demo').textContent =
       //   myArray + ' '
       // console.log("These" + myArray);
@@ -65,3 +66,13 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
   }
 
 })
+
+
+fetch("http://127.0.0.1:5000/transcript", {
+  body: {"text": transcript},
+  headers: {
+    "Content-Type": "application/json"
+  },
+  method: "POST"
+})
+
