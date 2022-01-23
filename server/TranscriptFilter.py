@@ -15,7 +15,7 @@ def filter_transcript(transcript):
     current_mentioned = check_in_array(sentence, current_trends)
     alltime_mentioned = check_in_array(sentence, all_time)
 
-    action = result(rising_prices, prices, cheaper_prices, current_trends, alltime_mentioned)
+    action = resultfunct(Increase_mentioned, Price_mentioned, Low_mentioned, current_mentioned, alltime_mentioned)
     return action
 
 
@@ -34,8 +34,11 @@ def check_in_array(A, B):
     for i in range(len(A)):
         if A[i] in B:
             return True
+        else:
+            return False
     
-def result(rising_prices, prices, cheaper_prices, current_trends, alltime_mentioned):
+def resultfunct(rising_prices, prices, cheaper_prices, current_trends, alltime_mentioned):
+    result = ''
     if alltime_mentioned:
         addon = ' ALL TIME'
     else:
@@ -49,6 +52,6 @@ def result(rising_prices, prices, cheaper_prices, current_trends, alltime_mentio
 
     return result
 
-transcript_ = 'can you show me higher prices of NFTs from all time'
+transcript_ = 'Show me current trends'
 final_act = filter_transcript(transcript_)
 print(final_act)

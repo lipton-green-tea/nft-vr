@@ -3,7 +3,7 @@ import requests
 import time
 import os
 from flask_cors import CORS
-
+from TranscriptFilter import filter_transcript, check_in_array, result
 template_dir = os.path.abspath('../client')
 app = Flask(__name__, template_folder=template_dir)
 CORS(app)
@@ -33,9 +33,13 @@ def getNFT(tokenAddress, tokenID, size=800):
 
 @app.route('/transcript', methods=['GET', 'POST'])
 def handleTranscript():
+    print(request.__dict__.items())
     content = request.json["text"]
     print(content)
+    action = filter_transcript(content)
+    print(action)
     return ('', 200)
+
 
 
 @app.route('/')
