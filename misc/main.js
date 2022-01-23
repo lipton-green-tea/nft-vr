@@ -4,6 +4,8 @@
 navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
   console.log({ stream })
 
+  let transcript = "";
+
   if (!MediaRecorder.isTypeSupported('audio/webm'))
     return alert('Browser not supported')
 
@@ -17,12 +19,24 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
   ])
 
   document.addEventListener('mousedown', event => {
+    transcript = ""
     mediaRecorder.start(250)
-    console.log('onopen' )
+    console.log('onopen')
   })
 
   document.addEventListener('mouseup', event => {
-    mediaRecorder.stop()
+    mediaRecorder.stop();
+    console.log("finished")
+    console.log(transcript)
+    fetch("http://127.0.0.1:5000/transcript", {
+      body: JSON.stringify({ "text": transcript }),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST"
+    }).then((response) => {
+      console.log(response);
+    });
   })
 
   socket.onopen = () => {
@@ -40,12 +54,14 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
 
   socket.onmessage = (message) => {
     const received = JSON.parse(message.data)
-    const transcript = received.channel.alternatives[0].transcript
-    if (transcript && received.is_final) {
-      console.log(transcript)
-      document.querySelector('#transcript').textContent +=
-        transcript + ' '
-      const myArray = transcript.split(" ");
+    const t = received.channel.alternatives[0].transcript
+    console.log(t);
+    if (t && received.is_final) {
+      console.log(t)
+      transcript += t
+      // document.querySelector('#transcript').textContent +=
+      //   transcript + ' '
+      // const myArray = transcript.split(" ");
 
       // document.querySelector('#demo').textContent =
       //   myArray + ' '
@@ -68,11 +84,6 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
 })
 
 
-fetch("http://127.0.0.1:5000/transcript", {
-  body: {"text": transcript},
-  headers: {
-    "Content-Type": "application/json"
-  },
-  method: "POST"
-})
+
+
 
