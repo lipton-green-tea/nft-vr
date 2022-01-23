@@ -49,6 +49,6 @@ def result(rising_prices, prices, cheaper_prices, current_trends, alltime_mentio
 
     return result
 
-transcript_ = 'can you show me higher prices of NFTs from all time'
-final_act = filter_transcript(transcript_)
-print(final_act)
+#transcript_ = 'can you show me higher prices of NFTs from all time'
+#final_act = filter_transcript(transcript_)
+#print(final_act)
