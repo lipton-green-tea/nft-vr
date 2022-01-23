@@ -6,7 +6,8 @@ AFRAME.registerComponent('gallerist', {
         this.picture_frames = this.get_picture_frame_ids();
         console.log(this.picture_frames);
         this.request_nfts("ru39");
-        this.el.addEventListener("new-nfts", this.load_nfts_builder(this));
+        var gal = this
+        this.el.sceneEl.addEventListener("new-nfts", gal.load_nfts_builder(gal));
     },
 
     get_picture_frame_ids: function() {

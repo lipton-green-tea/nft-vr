@@ -39,7 +39,7 @@ AFRAME.registerComponent('recorder', {
               method: "POST"
             }).then((response) => {
               text_el.setAttribute('value', response);
-              recorder.elem.emit("new-nfts", response.json());
+              recorder.elem.emit("new-nfts", response.json(), true);
             });
           })
           
