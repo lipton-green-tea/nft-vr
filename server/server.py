@@ -124,18 +124,26 @@ def fetchCollectionMarketplace():
 def fetchCollectionData():
     c = request.args.get("c")
     t = request.args.get("t")
+    dict_ = {'buyers': 'Buyers', 'sellers': 'Sellers', 'value': 'Total Sales'}
     if t in ["buyers", "sellers", "value"]:
         data = fetchData(
             "sales/{}/summary-daily-{}?_={}".format(c, t, round(int(time.time()), -6)))
-
+        
         days = list(range(len(data)))
         vals = list(map(lambda i: i["count"], data))
         fig, ax = plt.subplots(1, 1)
         ax.plot(days, vals, color='blue', alpha=1)
         fig.patch.set_alpha(0)
         ax.patch.set_alpha(0)
+        plt.title("{} - Trend over 30 days".format(dict_[t]), y = -.085)
         plt.fill_between(days, vals, color='blue', alpha=0.4)
-        plt.axis('off')
+        # plt.axis('off')
+        plt.xticks(days, "")
+        plt.yticks(vals, "")      
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.axes.xaxis.set_ticks([])
+        ax.axes.yaxis.set_ticks([])
         plt.savefig("chart.png")
 
         return send_file("chart.png", mimetype='image/png')
