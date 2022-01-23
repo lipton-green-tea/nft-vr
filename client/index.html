@@ -5,7 +5,6 @@
     <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
     <script src="https://unpkg.com/super-hands@^3.0.1/dist/super-hands.min.js"></script>
     <script src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js"></script>
-    <script src="components/shelf.js"></script>
     <script src="components/picture-frame.js"></script>
     <script src="components/gallerist.js"></script>
     <script src="components/input-listen.js"></script>
@@ -13,21 +12,22 @@
     <script src="components/mic-listener.js"></script>
   </head>
   <body>
-    <a-scene gallerist recorder
+    <a-scene gallerist
       inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
-      <a-entity id="picture-frame-1" picture-frame position="-2 1.2 -2.90"></a-entity>
+      <a-entity id="picture-frame-1" grabbable draggable picture-frame position="-2 1.2 -2.90"></a-entity>
       <a-entity id="picture-frame-2" picture-frame position="0 1.2 -2.90"></a-entity>
       <a-entity id="picture-frame-3" picture-frame position="2 1.2 -2.90"></a-entity>
       <a-entity id="picture-frame-4" picture-frame rotation="0 180 0" position="-2 1.2 2.90"></a-entity>
       <a-entity id="picture-frame-5" picture-frame rotation="0 180 0" position="0 1.2 2.90"></a-entity>
       <a-entity id="picture-frame-6" picture-frame rotation="0 180 0" position="2 1.2 2.90"></a-entity>
+      <a-box position="0 1 -1.5" scale="0.5 0.5 0.5" recorder></a-box>s
       <!-- <a-entity id="cameraRig" position="0 1.7 0">
       <a-entity id="cameraRig" position="0 1.7 0">
         <a-entity id="head" camera wasd-controls look-controls></a-entity>
         <a-entity id="left-hand" oculus-touch-controls="hand: right" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
         <a-entity id="right-hand" oculus-touch-controls="hand: left" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
       </a-entity> -->
-      <a-entity id="cameraRig" position="0 0 0">
+      <a-entity id="cameraRig" recorder position="0 0 0">
         <a-entity id="head" camera wasd-controls look-controls></a-entity>
         <!-- <a-entity id="left-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
         <a-entity id="right-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity> -->
@@ -42,7 +42,7 @@
                 align="center" color="#FFFFFF"></a-text>
         </a-entity>
       </a-entity>
-      <a-text value="he" align="center" position="0 1 0" scale="2 0.5 0.5" mic-listener></a-text>
+      <a-text value="he" align="center" color="#EE3355" position="0 1 1" scale="2 0.5 0.5" mic-listener></a-text>
       <a-box id="wall1" scale="0.1 2.5 6" position="-4 1.25 0" rotation="0 0 0"></a-box>
       <a-box id="wall2" scale="0.1 2.5 6" position="4 1.25 0" rotation="0 0 0"></a-box>
       <a-box id="wall3" scale="8 2.5 0.1" position="0 1.25 3" rotation="0 0 0" src="https://media.istockphoto.com/photos/seamless-white-painted-concrete-wall-texture-background-picture-id653874468?b=1&k=20&m=653874468&s=170667a&w=0&h=OqXwt3niGmTYUtanfpU3yZjxN7i25jdb1tbtQCuX4io="></a-box>
