@@ -6,16 +6,13 @@ import os
 import requests_cache
 from flask_cors import CORS
 from TranscriptFilter import filter_transcript, check_in_array, resultfunct
-<<<<<<< HEAD
 import base64
-=======
-from Trends.py import json_data, plot_data
-
->>>>>>> fa15cb9f1402cbe23b854c5675154fd5cb540498
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 
 template_dir = os.path.abspath('../client')
 app = Flask(__name__, template_folder=template_dir)
-CORS(app, max_age=86400)
+CORS(app)
 
 DOMAIN = "https://api2.cryptoslam.io/api"
 CDN = "https://d35vxokfjoq7rk.cloudfront.net"
@@ -103,7 +100,7 @@ def fetchTrendingNFTs(timescale="day"):
         img_url = getNFT(address, tokenID, size=SIZE)
         data[0]["width"] = SIZE
         data[0]["height"] = SIZE
-        data[0]["url"] = "/url/{}".format(img_url)
+        data[0]["url"] = "https://nft-vr.herokuapp.com/url/{}".format(img_url)
         res.append(data[0])
     return jsonify(res)
 
@@ -119,18 +116,31 @@ def fetchCollectionMarketplace():
         img_url = getNFT(address, tokenID, size=SIZE)
         nft["width"] = SIZE
         nft["height"] = SIZE
-        nft["url"] = "/url/{}".format(img_url)
+        nft["url"] = "https://nft-vr.herokuapp.com/url/{}".format(img_url)
     return jsonify(data)
 
 
-@app.route('/get_collection_data')
+@app.route('/get_collection_data_graph')
 def fetchCollectionData():
     c = request.args.get("c")
     t = request.args.get("t")
     if t in ["buyers", "sellers", "value"]:
         data = fetchData(
             "sales/{}/summary-daily-{}?_={}".format(c, t, round(int(time.time()), -6)))
-        return jsonify(data)
+
+        days = list(range(len(data)))
+        vals = list(map(lambda i: i["count"], data))
+        fig, ax = plt.subplots(1, 1)
+        ax.plot(days, vals, color='blue', alpha=1)
+        fig.patch.set_alpha(0)
+        ax.patch.set_alpha(0)
+        plt.fill_between(days, vals, color='blue', alpha=0.4)
+        plt.axis('off')
+        plt.savefig("chart.png")
+
+        return send_file("chart.png", mimetype='image/png')
+    else:
+        return jsonify(None)
 
 
 method_requests_mapping = {
@@ -145,14 +155,25 @@ method_requests_mapping = {
 
 url_cache = []
 
+
 @app.route('/url/<path:url>', methods=method_requests_mapping.keys())
 def proxy(url):
-    img = url.split("/")[-1].split("?")[0]
-    if url not in url_cache:
-        r = requests.get(url)
-        with open("../client/images/" + img, 'wb') as f:
-            f.write(r.content)
-    return send_from_directory('../client/images/', img)
+    requests_function = method_requests_mapping[flask.request.method]
+    request = requests_function(url, stream=True, params=flask.request.args)
+    response = flask.Response(flask.stream_with_context(request.iter_content()),
+                              content_type=request.headers['content-type'],
+                              status=request.status_code)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
+# @app.route('/url/<path:url>', methods=method_requests_mapping.keys())
+# def proxy(url):
+#     img = url.split("/")[-1].split("?")[0]
+#     if url not in url_cache:
+#         r = requests.get(url)
+#         with open("../client/images/" + img, 'wb') as f:
+#             f.write(r.content)
+#     return send_from_directory('../client/images/', img)
 
 
 @app.route('/<path:path>')
