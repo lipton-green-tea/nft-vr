@@ -28,7 +28,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     mediaRecorder.stop();
     console.log("finished")
     console.log(transcript)
-    fetch("http://127.0.0.1:5000/transcript", {
+    fetch("https://nft-vr.herokuapp.com/transcript", {
       body: JSON.stringify({ "text": transcript }),
       headers: {
         "Content-Type": "application/json"
